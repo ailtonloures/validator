@@ -8,7 +8,7 @@ Projeto livre, com objetivo de facilitar a validação de formulários, requisi�
 
 ## Instalação
 
-Com o (composer)[https://getcomposer.org/] instalado, execute o comando abaixo:
+Com o [composer](https://getcomposer.org/) instalado, execute o comando abaixo:
 
 ```
 composer require ailtonloures/validator
