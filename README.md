@@ -8,7 +8,7 @@ Projeto livre, com objetivo de facilitar a validação de formulários, requisi�
 
 ## Instalação
 
-Com o **composer**[https://getcomposer.org/] instalado, execute o comando abaixo:
+Com o (composer)[https://getcomposer.org/] instalado, execute o comando abaixo:
 
 ```
 composer require ailtonloures/validator
@@ -24,7 +24,7 @@ ou no arquivo **composer.json** do seu projeto
 
 ## Exemplo de Uso
 
-### Uso padrão
+### Uso padrão:
 
 ```[php]
 <?php
@@ -49,7 +49,7 @@ if (!$validator->valid()) {
 
 ```
 
-### Personalizando as mensagens de erro 
+### Personalizando as mensagens de erro:
 
 ```[php]
 <?php
@@ -79,7 +79,7 @@ if (!$validator->valid()) {
 
 ```
 
-Retorno, caso não seja válido
+**Retorno, caso não seja válido**
 
 ```
 "validation": 
@@ -88,7 +88,7 @@ Retorno, caso não seja válido
     }
 ```
 
-### Encadeamento, quando for necessário validar mais de um alvo e Apelidar, quando validar mais de um alvo, pode também apelidar o conjunto a ser validado para identificação
+### Encadeamento, quando for necessário validar mais de um alvo e Apelidar, quando validar mais de um alvo, pode também apelidar o conjunto a ser validado para identificação:
 
 ```[php]
 <?php
@@ -126,7 +126,7 @@ if (!$validator->valid()) {
 
 ```
 
-Retorno, caso não seja válido
+**Retorno, caso não seja válido**
 
 ```
 "validation": 
