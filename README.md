@@ -24,6 +24,14 @@ ou no arquivo **composer.json** do seu projeto
 
 ## Exemplo de Uso
 
+### Tipos de validação disponíveis
+
+- required
+- email
+- numeric
+- min:{int}
+- max:{int}
+
 ### Uso padrão:
 
 ```[php]
