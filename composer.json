@@ -1,0 +1,23 @@
+{
+    "name": "ailtonloures/validator",
+    "description": "Biblioteca para validação de dados, requests, forms, etc. de forma simples e fácil",
+    "homepage": "https://github.com/ailtonloures/validator.git",
+    "authors": [
+        {
+            "name": "Ailton Loures Ferreira",
+            "email": "ailton.loures99@gmail.com"
+        }
+    ],
+    "license": "ISC",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^7.2",
+        "ext-json" : "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Validator\\": "src/"
+        }
+    }
+}
