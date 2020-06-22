@@ -8,7 +8,7 @@
             "email": "ailton.loures99@gmail.com"
         }
     ],
-    "license": "ISC",
+    "license": "MIT",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
