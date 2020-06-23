@@ -25,7 +25,7 @@ final class Validator
      */
     public static function make(array $target, array $rules, array $messages = null, string $nickName = null): Validator
     {
-        if (empty($target)) {
+        if (!empty($rules) && empty($target)) {
             throw new Exception("This target to be validated is null.");
         }
 
@@ -33,31 +33,35 @@ final class Validator
 
             if (!array_key_exists($input, $target)) {
                 self::setMessage($input, 'This input not exists.');
-            }
 
-            $inputValue = $target[$input];
-            $inputRules = explode("|", $rule);
+            } else {
 
-            foreach ($inputRules as $validation) {
+                $inputValue = $target[$input];
+                $inputRules = !is_object($rule) ? explode("|", $rule) : ["callback_function"];
 
-                $separatedValidation = explode(":", $validation);
+                foreach ($inputRules as $validation) {
 
-                $functionName    = reset($separatedValidation);
-                $validationExtra = end($separatedValidation);
-                $functionMessage = null;
+                    $separatedValidation = explode(":", $validation);
 
-                if (!empty($messages) && key_exists($input, $messages)) {
+                    $functionName    = reset($separatedValidation);
+                    $validationExtra = end($separatedValidation);
 
-                    $inputMessages = $messages[$input];
+                    $functionMessage = null;
 
-                    foreach ($inputMessages as $inputMessage => $message) {
-                        if ($inputMessage == $functionName) {
-                            $functionMessage = $message;
+                    if (!empty($messages) && key_exists($input, $messages)) {
+
+                        $inputMessages = $messages[$input];
+
+                        foreach ($inputMessages as $inputMessage => $message) {
+                            if ($inputMessage == $functionName) {
+                                $functionMessage = $message;
+                            }
                         }
                     }
+
+                    self::{$functionName}($input, $functionMessage, $inputValue, !is_object($rule) ?  $validationExtra : $rule);
                 }
 
-                self::{$functionName}($input, $functionMessage, $inputValue, $validationExtra ?? null);
                 self::$messageNickName = $nickName;
             }
         }

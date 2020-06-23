@@ -6,6 +6,7 @@ trait ValidationTrait
 {
     /**
      * @param string $input
+     * @param string $message
      * @param string $value
      * @return void
      */
@@ -19,6 +20,7 @@ trait ValidationTrait
 
     /**
      * @param string $input
+     * @param string $message
      * @param string $value
      * @return void
      */
@@ -32,7 +34,8 @@ trait ValidationTrait
 
     /**
      * @param string $input
-     * @param float|integer $value
+     * @param string $message
+     * @param integer|float $value
      * @return void
      */
     protected static function numeric(string $input, string $message = null, $value = null): void
@@ -45,7 +48,8 @@ trait ValidationTrait
 
     /**
      * @param string $input
-     * @param float|integer $value
+     * @param string $message
+     * @param mixed $value
      * @param integer $max
      * @return void
      */
@@ -59,7 +63,8 @@ trait ValidationTrait
 
     /**
      * @param string $input
-     * @param float|integer $value
+     * @param string $message
+     * @param mixed $value
      * @param integer $min
      * @return void
      */
@@ -67,6 +72,24 @@ trait ValidationTrait
     {
         if (strlen($value) < $min) {
             self::setMessage($input, $message ?? "This field must be at least {$min} characters");
+        }
+    }
+
+    /**
+     * @param string $input
+     * @param string $message
+     * @param mixed $value
+     * @param object $callback
+     * @return void
+     */
+    protected static function callback_function(string $input, string $message = null, $value = null, object $callback = null): void
+    {
+        if (is_object($callback)) {
+            $callbackFunctionReturn = call_user_func($callback, $value, $input);
+
+            if ($callbackFunctionReturn === false) {
+                self::setMessage($input, $message ?? "This function not have a message.");
+            }
         }
     }
 }
