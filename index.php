@@ -19,14 +19,18 @@ $validator = Validator::make($request,
     [
         'name'  => [
             'required' => 'Campo obrigatório',
-            'min'      => 'Este campo deve ter no mínimo 3 caracteres',
+            'min'      => 'Este :attr deve ter no mínimo 3 caracteres',
         ],
         'email' => [
-            'email' => 'E-mail ínvalido :attribute',
+            'email' => ':attr ínvalido',
         ],
         'soma'  => [
-            'callback_function' => 'O resultado não é ',
+            'callback_function' => 'O resultado não é 8',
         ],
+    ],
+    [
+        'name' => 'nome do fulano',
+        'email' => 'e-mail'
     ]
 );
 

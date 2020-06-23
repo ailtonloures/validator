@@ -23,7 +23,7 @@ final class Validator
      * @return Validator
      * @throws Exception
      */
-    public static function make(array $target, array $rules, array $messages = null, string $nickName = null): Validator
+    public static function make(array $target, array $rules, array $messages = null, array $attributes = null, string $nickName = null): Validator
     {
         if (!empty($rules) && empty($target)) {
             throw new Exception("This target to be validated is null.");
@@ -33,14 +33,14 @@ final class Validator
 
             if (!array_key_exists($input, $target)) {
                 self::setMessage($input, 'This input not exists.');
-
+                
             } else {
 
-                $inputValue = $target[$input];
-                $inputRules = !is_object($rule) ? explode("|", $rule) : ["callback_function"];
+                $inputValue     = $target[$input];
+                $inputAttribute = $attributes[$input] ?? null;
+                $inputRules     = !is_object($rule) ? explode("|", $rule) : ["callback_function"];
 
                 foreach ($inputRules as $validation) {
-
                     $separatedValidation = explode(":", $validation);
 
                     $functionName    = reset($separatedValidation);
@@ -53,13 +53,15 @@ final class Validator
                         $inputMessages = $messages[$input];
 
                         foreach ($inputMessages as $inputMessage => $message) {
+
                             if ($inputMessage == $functionName) {
+                                $message         = str_replace(":attr", $inputAttribute ?? $input, $message);
                                 $functionMessage = $message;
                             }
                         }
                     }
 
-                    self::{$functionName}($input, $functionMessage, $inputValue, !is_object($rule) ?  $validationExtra : $rule);
+                    self::{$functionName}($input, $functionMessage, $inputValue, !is_object($rule) ? $validationExtra : $rule);
                 }
 
                 self::$messageNickName = $nickName;
