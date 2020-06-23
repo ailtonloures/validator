@@ -55,17 +55,18 @@ final class Validator
 
                             if ($inputMessage == $functionName) {
                                 $message         = str_replace(":attr", $inputAttribute ?? $input, $message);
+                                $message         = str_replace(":value", $inputValue, $message);
                                 $functionMessage = $message;
                             }
                         }
                     }
 
                     self::$messageNickName = $nickName;
-                    self::{$functionName}($input, $functionMessage, $inputValue, !is_object($rule) ? $validationExtra : $rule);                   
+                    self::{$functionName}($input, $functionMessage, $inputValue, !is_object($rule) ? $validationExtra : $rule);
                 }
             }
         }
-        
+
         return new static();
     }
 
