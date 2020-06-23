@@ -28,7 +28,7 @@ ou no arquivo **composer.json** do seu projeto
 }
 ```
 
-## Tipos de validação
+## Tipos de validação:
 
 - required
 - email
@@ -36,13 +36,13 @@ ou no arquivo **composer.json** do seu projeto
 - min:{int}
 - max:{int}
 
-## Features da versão 1.1
+## Features da versão 1.1:
 
 - validação personalizada por callback
 - renomear o atributo com a palavra reservada :attr
 - receber o valor do input na mensagem com a palavra reservada :value
 
-## Exemplos
+## Exemplos:
 
 ### Uso padrão:
 
@@ -112,7 +112,7 @@ Retorno, caso não seja válido
     }
 ```
 
-### Encadeamento
+### Encadeamento:
 
 É possível encadear a validação quando necessário fazer em mais de um alvo, além disso é possível dar um nome para identificar o resultado de cada alvo validado no quinto parâmetro.
 
@@ -168,7 +168,7 @@ Retorno, caso não seja válido.
     }
 ```
 
-### Personalizando validação
+### Personalizando validação:
 
 Agora é possível criar a sua validação personalizada, através de callbacks onde a mesma recebe dois parametros o **$value** que é o valor do input e próprio **$input**, e retorno dessa callback **deverá ser sempre TRUE** caso não seja, ele dispara como não válido e ai você tem a resposta da sua validação. E obrigatóriamente você deverá personalizar uma mensagem para essa validação, em **$messages** ao ínves de passar o nome da validação, você pode chamar a palavra reservada **callback_function** e criar sua mensagem.
 
@@ -211,7 +211,7 @@ Retorno, caso não seja válido.
     }
 ```
 
-### Novo nome para o atributo
+### Novo nome para o atributo:
 
 É possível também renomear os atributos passando no quarto parâmetro um array onde a chave é o **nome do input** e o valor é o novo nome que deseja dar. E para receber esse valor, você pode usar a palavra reservada **:attr**.
 
@@ -267,7 +267,7 @@ Caso não deseje renomear, pode passar o :attr da mesma forma, mas ao invés dis
     }
 ```
 
-### Recebendo valor do input
+### Recebendo valor do input:
 
 Você também pode receber o **valor** do input que está sendo validado e passar na mensagem usando a palavra reservada **:value**. 
 
