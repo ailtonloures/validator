@@ -1,4 +1,10 @@
-# Validator
+ <h1 align="center"> Validator </h1>
+ 
+<span align="center">  
+    
+[![Code Quality](https://www.code-inspector.com/project/10166/score/svg)](https://frontend.code-inspector.com/public/project/10166/validator/dashboard)
+
+</span>
 
 Projeto livre, com objetivo de facilitar a validação de formulários, requisições http, e tudo o que for necessário.
 
