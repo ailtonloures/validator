@@ -19,6 +19,7 @@ final class Validator
      * @param array $target
      * @param array $rules
      * @param array|null $messages
+     * @param array|null $attributes
      * @param string|null $nickName
      * @return Validator
      * @throws Exception
@@ -33,7 +34,7 @@ final class Validator
 
             if (!array_key_exists($input, $target)) {
                 self::setMessage($input, 'This input not exists.');
-                
+
             } else {
 
                 $inputValue     = $target[$input];
@@ -45,11 +46,9 @@ final class Validator
 
                     $functionName    = reset($separatedValidation);
                     $validationExtra = end($separatedValidation);
-
                     $functionMessage = null;
 
                     if (!empty($messages) && key_exists($input, $messages)) {
-
                         $inputMessages = $messages[$input];
 
                         foreach ($inputMessages as $inputMessage => $message) {
@@ -61,13 +60,12 @@ final class Validator
                         }
                     }
 
-                    self::{$functionName}($input, $functionMessage, $inputValue, !is_object($rule) ? $validationExtra : $rule);
+                    self::$messageNickName = $nickName;
+                    self::{$functionName}($input, $functionMessage, $inputValue, !is_object($rule) ? $validationExtra : $rule);                   
                 }
-
-                self::$messageNickName = $nickName;
             }
         }
-
+        
         return new static();
     }
 
