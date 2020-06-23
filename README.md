@@ -16,16 +16,8 @@ Projeto livre, com objetivo de facilitar a validação de formulários, requisi�
 
 Com o [composer](https://getcomposer.org/) instalado, execute o comando abaixo:
 
-```
+```bash
 composer require ailtonloures/validator
-```
-
-ou no arquivo **composer.json** do seu projeto
-
-```
-"require": {
-    "ailtonloures/validator": "^1.*",
-}
 ```
 
 ## Tipos de validação:
