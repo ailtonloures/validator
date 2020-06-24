@@ -8,10 +8,10 @@ use Validator\ValidationTrait;
 /**
  * Class to manage the validation
  *
- * @author Ailton Loures <ailton.loures99@gmail.com>
- * @version 1.2.1
- * @copyright 2020 Validator
  * @package Validator
+ * @author Ailton Loures <ailton.loures99@gmail.com>
+ * @copyright 2020 Validator
+ * @version 1.2.2
  * @see https://github.com/ailtonloures/validator
  */
 final class Validator
@@ -58,7 +58,7 @@ final class Validator
 
             if (!array_key_exists($input, $target)) {
 
-                self::setMessage($input, 'This input not exists.');
+                self::setMessage($input, "not_found", 'This input not exists.');
 
             } else {
                 $inputValue     = $target[$input];
@@ -125,18 +125,19 @@ final class Validator
      * Saves a new message for validation
      *
      * @param string $input The input name
+     * @param string $messageName The name for the validation message
      * @param string $message The message for the input
      *
      * @return void
      */
-    protected static function setMessage(string $input, string $message): void
+    protected static function setMessage(string $input, string $messageName, string $message): void
     {
         if ($nickName = self::$messageNickName) {
-            self::$messages[$nickName][$input] = $message;
+            self::$messages[$nickName][$input][$messageName] = $message;
             return;
         }
 
-        self::$messages[$input] = $message;
+        self::$messages[$input][$messageName] = $message;
     }
 
     /**

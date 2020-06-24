@@ -95,7 +95,9 @@ Retorno, caso não seja válido
 ```json
 "validation": 
     {
-        "name": "Campo obrigatório",
+        "name": {
+            "required" : "Campo obrigatório"
+        },
     }
 ```
 
@@ -146,11 +148,15 @@ Retorno, caso não seja válido.
     {
         "first-target": 
         {
-            "name": "Campo obrigatório",
+            "name": {
+                "required" : "Campo obrigatório",
+            }
         },
         "second-target": 
         {
-            "email": "Invalid e-mail."
+            "email": {
+                "email" : "Invalid e-mail."
+            }
         }
     }
 ```
@@ -194,7 +200,9 @@ Retorno, caso não seja válido.
 ```json
 "validation": 
     {
-        "age" : "Não é maior de 18 anos"
+        "age" : {
+            "callback" : "Não é maior de 18 anos"
+        }
     }
 ```
 
@@ -239,7 +247,9 @@ Retorno, caso não seja válido continuará sendo...
 ```json
 "validation": 
     {
-        "age" : "Não é maior de 18 anos"
+        "age" : {
+            "callback" : "Não é maior de 18 anos"
+        }
     }
 ```
 
@@ -286,7 +296,9 @@ Retorno, caso não seja válido.
 ```json
 "validation": 
     {
-        "age" : "A idade dessa pessoa não é maior que 18 anos"
+        "age" : {
+            "callback" : "A idade dessa pessoa não é maior que 18 anos"
+        }
     }
 ```
 
@@ -295,7 +307,9 @@ Caso não deseje renomear, pode passar o :attr da mesma forma, mas ao invés dis
 ```json
 "validation": 
     {
-        "age" : "A age dessa pessoa não é maior que 18 anos"
+        "age" : { 
+            "callback" : "A age dessa pessoa não é maior que 18 anos"
+        }
     }
 ```
 
@@ -337,6 +351,8 @@ Retorno, caso não seja válido.
 ```json
 "validation": 
     {
-        "age" : "17 não é maior que 18"
+        "age" : {
+            "callback" : "17 não é maior que 18"
+        }
     }
 ```

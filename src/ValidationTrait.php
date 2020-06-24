@@ -5,10 +5,10 @@ namespace Validator;
 /**
  * Trait to valid the inputValues
  *
- * @author Ailton Loures <ailton.loures99@gmail.com>
- * @version 1.2.1
- * @copyright 2020 Validator
  * @package Validator
+ * @author Ailton Loures <ailton.loures99@gmail.com>
+ * @copyright 2020 Validator
+ * @version 1.2.2
  * @see https://github.com/ailtonloures/validator
  */
 trait ValidationTrait
@@ -27,7 +27,7 @@ trait ValidationTrait
         $email = filter_var($value, FILTER_SANITIZE_EMAIL);
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            self::setMessage($input, $message ?? 'Invalid e-mail.');
+            self::setMessage("$input", "email", $message ?? 'Invalid e-mail.');
         }
 
     }
@@ -44,7 +44,7 @@ trait ValidationTrait
     protected static function required(string $input, ?string $message = null, ?string $value = null): void
     {
         if (empty($value) || $value === "") {
-            self::setMessage($input, $message ?? 'Required field.');
+            self::setMessage($input, "required", $message ?? 'Required field.');
         }
 
     }
@@ -61,7 +61,7 @@ trait ValidationTrait
     protected static function numeric(string $input, ?string $message = null, $value = null): void
     {
         if (!is_numeric($value)) {
-            self::setMessage($input, $message ?? 'Not a valid number');
+            self::setMessage($input, "numeric", $message ?? 'Not a valid number');
         }
 
     }
@@ -79,7 +79,7 @@ trait ValidationTrait
     protected static function max(string $input, ?string $message = null, $value = null, ?int $max = null): void
     {
         if (strlen($value) > $max) {
-            self::setMessage($input, $message ?? "This field must have a maximum of {$max} characters");
+            self::setMessage($input, "max", $message ?? "This field must have a maximum of {$max} characters");
         }
 
     }
@@ -97,7 +97,7 @@ trait ValidationTrait
     protected static function min(string $input, ?string $message = null, $value = null, ?int $min = null): void
     {
         if (strlen($value) < $min) {
-            self::setMessage($input, $message ?? "This field must be at least {$min} characters");
+            self::setMessage($input, "min", $message ?? "This field must be at least {$min} characters");
         }
     }
 
@@ -123,7 +123,7 @@ trait ValidationTrait
             $callbackFunctionReturn = call_user_func($callback, $value, $input, $data);
 
             if ($callbackFunctionReturn === false) {
-                self::setMessage($input, $message ?? "This function not have a message.");
+                self::setMessage($input, "callback", $message ?? "This function not have a message.");
             }
         }
     }
