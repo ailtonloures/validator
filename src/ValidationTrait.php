@@ -2,40 +2,60 @@
 
 namespace Validator;
 
+/**
+ * Trait to valid the inputValues
+ *
+ * @author Ailton Loures <ailton.loures99@gmail.com>
+ * @version 1.2.1
+ * @copyright 2020 Validator
+ * @package Validator
+ * @see https://github.com/ailtonloures/validator
+ */
 trait ValidationTrait
 {
     /**
-     * @param string $input
-     * @param string|null $message
-     * @param string|null $value
+     * Valid the e-mails input
+     * 
+     * @param string $input The name of the input
+     * @param string|null $message The message validation for the input
+     * @param string|null $value The value of the input
+     * 
      * @return void
      */
     protected static function email(string $input, ?string $message = null, ?string $value = null): void
-    {
-        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+    {   
+        $email = filter_var($value, FILTER_SANITIZE_EMAIL);
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             self::setMessage($input, $message ?? 'Invalid e-mail.');
         }
 
     }
 
     /**
-     * @param string $input
-     * @param string|null $message
-     * @param string|null $value
+     * Validates if the input is empty or null
+     * 
+     * @param string $input The name of the input
+     * @param string|null $message The message validation for the input
+     * @param string|null $value The value of the input
+     * 
      * @return void
      */
     protected static function required(string $input, ?string $message = null, ?string $value = null): void
     {
-        if (empty($value)) {
+        if (empty($value) || $value === "") {
             self::setMessage($input, $message ?? 'Required field.');
         }
 
     }
 
     /**
-     * @param string $input
-     * @param string|null $message
-     * @param integer|float|null $value
+     * Validates if the input is numeric
+     * 
+     * @param string $input The name of the input
+     * @param string|null $message The message validation for the input
+     * @param string|null $value The value of the input
+     * 
      * @return void
      */
     protected static function numeric(string $input, ?string $message = null, $value = null): void
@@ -47,10 +67,13 @@ trait ValidationTrait
     }
 
     /**
-     * @param string $input
-     * @param string|null $message
-     * @param mixed|null $value
-     * @param integer|null $max
+     * Validates if the input value exceeds the maximum number of characters set
+     * 
+     * @param string $input The name of the input
+     * @param string|null $message The message validation for the input
+     * @param string|null $value The value of the input
+     * @param integer|null $max The maximum character value
+     * 
      * @return void
      */
     protected static function max(string $input, ?string $message = null, $value = null, ?int $max = null): void
@@ -62,10 +85,13 @@ trait ValidationTrait
     }
 
     /**
-     * @param string $input
-     * @param string|null $message
-     * @param mixed|null $value
-     * @param integer|null $min
+     * Validates if the input value is less than the minimum number of characters set
+     * 
+     * @param string $input The name of the input
+     * @param string|null $message The message validation for the input
+     * @param string|null $value The value of the input
+     * @param integer|null $min The minimum character value
+     * 
      * @return void
      */
     protected static function min(string $input, ?string $message = null, $value = null, ?int $min = null): void
@@ -76,11 +102,19 @@ trait ValidationTrait
     }
 
     /**
-     * @param string $input
-     * @param string|null $message
-     * @param mixed|null $value
-     * @param object|null $callback
-     * @param array|null $data
+     * Executes and validates if the callback is returning a false condition, 
+     * if it is false, it will return the message that the result is invalid
+     * 
+     * Returns three parameters, the first is the value of the input, 
+     * the second is the name of the input itself and 
+     * the third is the target that has been validated and all its data
+     * 
+     * @param string $input The name of the input
+     * @param string|null $message The message validation for the input
+     * @param string|null $value The value of the input
+     * @param object|null $callback The function will be executed
+     * @param array|null $data It is the target itself that has been validated, which can be a request, form, etc.
+     * 
      * @return void
      */
     protected static function callback_function(string $input, ?string $message = null, $value = null, ?object $callback = null, ?array $data = null): void

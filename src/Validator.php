@@ -5,22 +5,46 @@ namespace Validator;
 use Exception;
 use Validator\ValidationTrait;
 
+/**
+ * Class to manage the validation
+ *
+ * @author Ailton Loures <ailton.loures99@gmail.com>
+ * @version 1.2.1
+ * @copyright 2020 Validator
+ * @package Validator
+ * @see https://github.com/ailtonloures/validator
+ */
 final class Validator
 {
     use ValidationTrait;
 
-    /** @var array $messages */
+    /**
+     * The messages
+     *
+     * Store validation messages
+     *
+     * @var array $messages
+     */
     protected static $messages;
 
-    /** @var string $messageNickName */
+    /**
+     * Message NickName
+     *
+     * Nickname for the message set
+     *
+     * @var string $messageNickName
+     */
     protected static $messageNickName;
 
     /**
-     * @param array $target
-     * @param array $rules
-     * @param array|null $messages
-     * @param array|null $attributes
-     * @param string|null $nickName
+     * Create and execute validations
+     *
+     * @param array $target The target to be validated. Ex: requests, forms, etc.
+     * @param array $rules The rules for each target die
+     * @param array|null $messages The custom message for each rule
+     * @param array|null $attributes Renames target data
+     * @param string|null $nickName A nickname for the validated dataset
+     *
      * @return Validator
      * @throws Exception
      */
@@ -33,23 +57,25 @@ final class Validator
         foreach ($rules as $input => $rule) {
 
             if (!array_key_exists($input, $target)) {
+
                 self::setMessage($input, 'This input not exists.');
 
             } else {
-
                 $inputValue     = $target[$input];
                 $inputAttribute = $attributes[$input] ?? null;
 
-                if (!is_object($rule) && !is_array($rule)) {
-                    $inputRules = explode("|", $rule);
-                }
-
                 if (is_object($rule)) {
-                    $inputRules = ["callback_function"];
-                }
 
-                if (is_array($rule)) {
+                    $inputRules = ["callback_function"];
+
+                } else if (is_array($rule)) {
+
                     $inputRules = $rule;
+
+                } else {
+
+                    $inputRules = explode("|", $rule);
+
                 }
 
                 foreach ($inputRules as $newFunctionName => $function) {
@@ -96,8 +122,11 @@ final class Validator
     }
 
     /**
-     * @param string $input
-     * @param string $message
+     * Saves a new message for validation
+     *
+     * @param string $input The input name
+     * @param string $message The message for the input
+     *
      * @return void
      */
     protected static function setMessage(string $input, string $message): void
@@ -111,6 +140,8 @@ final class Validator
     }
 
     /**
+     * Returns all failed validation messages
+     *
      * @return array|null
      */
     protected static function getMessages(): ?array
@@ -123,6 +154,8 @@ final class Validator
     }
 
     /**
+     * Returns all messages if there is any failed validation
+     *
      * @return array|null
      */
     public static function fails(): ?array
@@ -135,6 +168,8 @@ final class Validator
     }
 
     /**
+     * Returns true if there is no fault message
+     *
      * @return boolean
      */
     public static function valid(): bool
