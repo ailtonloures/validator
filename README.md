@@ -27,12 +27,7 @@ composer require ailtonloures/validator
 - numeric
 - min:{int}
 - max:{int}
-
-## Features da versão 1.1:
-
-- validação personalizada por callback
-- renomear o atributo com a palavra reservada :attr
-- receber o valor do input na mensagem com a palavra reservada :value
+- validação personalizada por funções anônimas
 
 ## Exemplos:
 
@@ -162,7 +157,7 @@ Retorno, caso não seja válido.
 
 ### Personalizando validação:
 
-Agora é possível criar a sua validação personalizada, através de callbacks onde a mesma recebe dois parametros o **$value** que é o valor do input e próprio **$input**, e retorno dessa callback **deverá ser sempre TRUE** caso não seja, ele dispara como não válido e ai você tem a resposta da sua validação. E obrigatóriamente você deverá personalizar uma mensagem para essa validação, em **$messages** ao ínves de passar o nome da validação, você pode chamar a palavra reservada **callback_function** e criar sua mensagem.
+Agora é possível criar a sua validação personalizada, através de uma função anônima onde a mesma é uma **callback** e recebe três parâmetros, o primeiro é **valor do input**, o segundo é o **nome do input** e o terceiro é todo o conteúdo do alvo válidado que por exemplo pode ser o corpo de uma requisição. O retorno dessa função **deverá ser sempre TRUE** caso não seja, ele dispara como não válido e ai você tem a resposta da sua validação. E obrigatóriamente você deverá personalizar uma mensagem para essa validação, em **$messages** ao ínves de passar o nome da validação, você pode chamar a palavra reservada **callback_function** e criar sua mensagem.
 
 ```php
 <?php
@@ -174,7 +169,7 @@ require './vendor/autoload.php';
 $target = $_POST;
 
 $rules  = [
-    "age" => function($value, $input) {
+    "age" => function($value, $input, $post) {
         return $value >= 18;
     },
 ];
@@ -203,6 +198,51 @@ Retorno, caso não seja válido.
     }
 ```
 
+Pode também dar um nome para essa função anônima caso queira fazer mais de uma validação personalizada para um input ou outra já existente e obrigatóriamente para receber a mensagem dessa função nomeada, você deve passar o nome da função também em **messages**.
+
+```php
+<?php
+
+use Validator\Validator;
+
+require './vendor/autoload.php';
+
+$target = $_POST;
+
+$rules  = [
+    "age" => [
+        'required',
+        'not_adult' => function($value, $input, $post) {
+            return $value >= 18;
+        }
+    ],
+];
+
+$messages = [
+    "age" => [
+        "not_adult" => "Não é maior de 18 anos",
+        "required" => "Campo obrigatório"
+    ]
+];
+
+
+$validator = Validator::make($target, $rules, $messages);
+
+if (!$validator->valid()) {
+    echo json_encode($validator->fails());
+}
+
+```
+
+Retorno, caso não seja válido continuará sendo...
+
+```json
+"validation": 
+    {
+        "age" : "Não é maior de 18 anos"
+    }
+```
+
 ### Novo nome para o atributo:
 
 É possível também renomear os atributos passando no quarto parâmetro um array onde a chave é o **nome do input** e o valor é o novo nome que deseja dar. E para receber esse valor, você pode usar a palavra reservada **:attr**.
@@ -217,7 +257,7 @@ require './vendor/autoload.php';
 $target = $_POST;
 
 $rules  = [
-    "age" => function($value, $input) {
+    "age" => function($value, $input, $post) {
         return $value >= 18;
     },
 ];
@@ -273,7 +313,7 @@ require './vendor/autoload.php';
 $target = $_POST;
 
 $rules  = [
-    "age" => function($value, $input) {
+    "age" => function($value, $input, $post) {
         return $value >= 18;
     },
 ];

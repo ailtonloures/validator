@@ -39,30 +39,55 @@ final class Validator
 
                 $inputValue     = $target[$input];
                 $inputAttribute = $attributes[$input] ?? null;
-                $inputRules     = !is_object($rule) ? explode("|", $rule) : ["callback_function"];
 
-                foreach ($inputRules as $validation) {
-                    $separatedValidation = explode(":", $validation);
+                if (!is_object($rule) && !is_array($rule)) {
+                    $inputRules = explode("|", $rule);
+                }
 
-                    $functionName    = reset($separatedValidation);
-                    $validationExtra = end($separatedValidation);
+                if (is_object($rule)) {
+                    $inputRules = ["callback_function"];
+                }
+
+                if (is_array($rule)) {
+                    $inputRules = $rule;
+                }
+
+                foreach ($inputRules as $newFunctionName => $function) {
+
+                    if (!is_object($function)) {
+
+                        $separatedFunction = explode(":", $function);
+                        $functionName      = reset($separatedFunction);
+                        $extraParam        = !is_object($rule) ? end($separatedFunction) : $rule;
+
+                    } else {
+
+                        $functionName = "callback_function";
+                        $extraParam   = $function;
+
+                    }
+
                     $functionMessage = null;
 
                     if (!empty($messages) && key_exists($input, $messages)) {
+
                         $inputMessages = $messages[$input];
 
                         foreach ($inputMessages as $inputMessage => $message) {
 
-                            if ($inputMessage == $functionName) {
+                            if ($inputMessage == (is_string($newFunctionName) ? $newFunctionName : $functionName)) {
+
                                 $message         = str_replace(":attr", $inputAttribute ?? $input, $message);
                                 $message         = !is_object($inputValue) ? str_replace(":value", $inputValue, $message) : $message;
                                 $functionMessage = $message;
+
                             }
                         }
                     }
 
                     self::$messageNickName = $nickName;
-                    self::{$functionName}($input, $functionMessage, $inputValue, !is_object($rule) ? $validationExtra : $rule);
+                    self::{$functionName}($input, $functionMessage, $inputValue, $extraParam, $target);
+
                 }
             }
         }
