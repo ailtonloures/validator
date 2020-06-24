@@ -198,7 +198,7 @@ Retorno, caso não seja válido.
     }
 ```
 
-Pode também dar um nome para essa função anônima caso queira fazer mais de uma validação personalizada para um input ou outra já existente e obrigatóriamente para receber a mensagem dessa função nomeada, você deve passar o nome da função também em **messages**.
+Pode também dar um nome para essa função anônima caso queira fazer mais de uma validação personalizada para um input ou outra já existente e obrigatóriamente para receber a mensagem dessa função nomeada, você deve passar o nome da função também em **$messages**.
 
 ```php
 <?php
