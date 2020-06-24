@@ -55,7 +55,7 @@ final class Validator
 
                             if ($inputMessage == $functionName) {
                                 $message         = str_replace(":attr", $inputAttribute ?? $input, $message);
-                                $message         = str_replace(":value", $inputValue, $message);
+                                $message         = !is_object($inputValue) ? str_replace(":value", $inputValue, $message) : $message;
                                 $functionMessage = $message;
                             }
                         }
