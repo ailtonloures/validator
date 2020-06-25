@@ -8,7 +8,7 @@ namespace Validator;
  * @package Validator
  * @author Ailton Loures <ailton.loures99@gmail.com>
  * @copyright 2020 Validator
- * @version 1.2.2
+ * @version 1.2.4
  * @see https://github.com/ailtonloures/validator
  */
 trait ValidationTrait
@@ -37,13 +37,15 @@ trait ValidationTrait
      *
      * @param string $input The name of the input
      * @param string|null $message The message validation for the input
-     * @param string|null $value The value of the input
+     * @param mixed|null $value The value of the input
      *
      * @return void
      */
-    protected static function required(string $input, ?string $message = null, ?string $value = null): void
+    protected static function required(string $input, ?string $message = null, $value = null): void
     {
-        $value = trim($value);
+        if (is_string($value)) {
+            $value = trim($value);
+        }
 
         if (empty($value) || $value === "") {
             self::setMessage($input, "required", $message ?? 'Required field.');

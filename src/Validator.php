@@ -11,7 +11,7 @@ use Validator\ValidationTrait;
  * @package Validator
  * @author Ailton Loures <ailton.loures99@gmail.com>
  * @copyright 2020 Validator
- * @version 1.2.2
+ * @version 1.2.4
  * @see https://github.com/ailtonloures/validator
  */
 final class Validator
