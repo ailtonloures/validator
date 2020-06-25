@@ -161,8 +161,8 @@ final class Validator
      */
     public static function fails(): ?array
     {
-        if (!empty($messages = self::getMessages())) {
-            return ['validation' => $messages];
+        if (!self::valid()) {
+            return ['validation' => self::getMessages()];
         }
 
         return null;
@@ -175,11 +175,7 @@ final class Validator
      */
     public static function valid(): bool
     {
-        if (empty(self::getMessages())) {
-            return true;
-        }
-
-        return false;
+        return empty(self::getMessages());
     }
 
 }
