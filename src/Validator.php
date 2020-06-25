@@ -83,7 +83,7 @@ final class Validator
                     if (!is_object($function)) {
 
                         $separatedFunction = explode(":", $function);
-                        $functionName      = reset($separatedFunction);
+                        $functionName      = trim(reset($separatedFunction));
                         $extraParam        = !is_object($rule) ? end($separatedFunction) : $rule;
 
                     } else {
@@ -132,8 +132,11 @@ final class Validator
      */
     protected static function setMessage(string $input, string $messageName, string $message): void
     {
+        $input       = trim($input);
+        $messageName = trim($input);
+
         if ($nickName = self::$messageNickName) {
-            self::$messages[$nickName][$input][$messageName] = $message;
+            self::$messages[trim($nickName)][$input][$messageName] = $message;
             return;
         }
 
