@@ -73,7 +73,7 @@ trait ValidationTrait
      *
      * @param string $input The name of the input
      * @param string|null $message The message validation for the input
-     * @param string|null $value The value of the input
+     * @param mixed|null $value The value of the input
      * @param integer|null $max The maximum character value
      *
      * @return void
@@ -93,7 +93,7 @@ trait ValidationTrait
      *
      * @param string $input The name of the input
      * @param string|null $message The message validation for the input
-     * @param string|null $value The value of the input
+     * @param mixed|null $value The value of the input
      * @param integer|null $min The minimum character value
      *
      * @return void
