@@ -5,10 +5,10 @@ namespace Validator;
 /**
  * Trait to valid the inputValues
  *
- * @package Validator
  * @author Ailton Loures <ailton.loures99@gmail.com>
+ * @version 1.2.5
  * @copyright 2020 Validator
- * @version 1.2.4
+ * @package Validator
  * @see https://github.com/ailtonloures/validator
  */
 trait ValidationTrait
@@ -24,12 +24,13 @@ trait ValidationTrait
      */
     protected static function email(string $input, ?string $message = null, ?string $value = null): void
     {
-        $email = trim(filter_var($value, FILTER_SANITIZE_EMAIL));
+        if ($value) {
+            $email = filter_var($value, FILTER_SANITIZE_EMAIL);
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            self::setMessage($input, "email", $message ?? 'Invalid e-mail.');
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                self::setMessage("$input", "email", $message ?? 'Invalid e-mail.');
+            }
         }
-
     }
 
     /**
@@ -37,16 +38,12 @@ trait ValidationTrait
      *
      * @param string $input The name of the input
      * @param string|null $message The message validation for the input
-     * @param mixed|null $value The value of the input
+     * @param string|null $value The value of the input
      *
      * @return void
      */
-    protected static function required(string $input, ?string $message = null, $value = null): void
+    protected static function required(string $input, ?string $message = null, ?string $value = null): void
     {
-        if (is_string($value)) {
-            $value = trim($value);
-        }
-
         if (empty($value) || $value === "") {
             self::setMessage($input, "required", $message ?? 'Required field.');
         }
@@ -64,7 +61,7 @@ trait ValidationTrait
      */
     protected static function numeric(string $input, ?string $message = null, $value = null): void
     {
-        if (!is_numeric($value)) {
+        if ($value && !is_numeric($value)) {
             self::setMessage($input, "numeric", $message ?? 'Not a valid number');
         }
 
@@ -75,16 +72,14 @@ trait ValidationTrait
      *
      * @param string $input The name of the input
      * @param string|null $message The message validation for the input
-     * @param mixed|null $value The value of the input
+     * @param string|null $value The value of the input
      * @param integer|null $max The maximum character value
      *
      * @return void
      */
     protected static function max(string $input, ?string $message = null, $value = null, ?int $max = null): void
     {
-        $value = trim($value);
-
-        if (strlen($value) > $max) {
+        if ($value && strlen($value) > $max) {
             self::setMessage($input, "max", $message ?? "This field must have a maximum of {$max} characters");
         }
 
@@ -95,16 +90,14 @@ trait ValidationTrait
      *
      * @param string $input The name of the input
      * @param string|null $message The message validation for the input
-     * @param mixed|null $value The value of the input
+     * @param string|null $value The value of the input
      * @param integer|null $min The minimum character value
      *
      * @return void
      */
     protected static function min(string $input, ?string $message = null, $value = null, ?int $min = null): void
     {
-        $value = trim($value);
-
-        if (strlen($value) < $min) {
+        if ($value && strlen($value) < $min) {
             self::setMessage($input, "min", $message ?? "This field must be at least {$min} characters");
         }
     }
@@ -127,7 +120,7 @@ trait ValidationTrait
      */
     protected static function callback_function(string $input, ?string $message = null, $value = null, ?object $callback = null, ?array $data = null): void
     {
-        if (is_object($callback)) {
+        if ($value && is_object($callback)) {
             $callbackFunctionReturn = call_user_func($callback, $value, $input, $data);
 
             if ($callbackFunctionReturn === false) {
