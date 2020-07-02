@@ -133,7 +133,7 @@ final class Validator
     protected static function setMessage(string $input, string $messageName, string $message): void
     {
         $input       = trim($input);
-        $messageName = trim($input);
+        $messageName = trim($messageName);
 
         if ($nickName = self::$messageNickName) {
             self::$messages[trim($nickName)][$input][$messageName] = $message;
