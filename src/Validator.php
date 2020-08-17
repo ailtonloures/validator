@@ -54,66 +54,66 @@ final class Validator
             throw new Exception("This target to be validated is null.");
         }
 
-        foreach ($rules as $input => $rule) {
+        foreach ($rules as $attribute => $rule) {
 
-            if (!array_key_exists($input, $target)) {
-
-                self::setMessage($input, "not_found", 'This input not exists.');
+            if (!array_key_exists($attribute, $target)) {
+                self::setMessage($attribute, 'This attribute not exists.');
 
             } else {
-                $inputValue     = $target[$input];
-                $inputAttribute = $attributes[$input] ?? null;
+                $attributeValue = $target[$attribute];
+                $attributeName  = $attributes[$attribute] ?? $attribute;
 
                 if (is_object($rule)) {
-
-                    $inputRules = ["callback_function"];
-
+                    $attributeRules = ["callback_function"];
                 } else if (is_array($rule)) {
-
-                    $inputRules = $rule;
-
+                    $attributeRules = $rule;
                 } else {
-
-                    $inputRules = explode("|", $rule);
-
+                    $attributeRules = explode("|", $rule);
                 }
 
-                foreach ($inputRules as $newFunctionName => $function) {
-
-                    if (!is_object($function)) {
-
-                        $separatedFunction = explode(":", $function);
-                        $functionName      = trim(reset($separatedFunction));
-                        $extraParam        = !is_object($rule) ? end($separatedFunction) : $rule;
+                foreach ($attributeRules as $newValidation => $validation) {
+                    if (!is_object($validation)) {
+                        $separatedValidations = explode(":", $validation);
+                        $validationName       = trim(reset($separatedValidations));
+                        $extraAttribute       = !is_object($rule) ? end($separatedValidations) : $rule;
 
                     } else {
-
-                        $functionName = "callback_function";
-                        $extraParam   = $function;
-
+                        $validationName = "callback_function";
+                        $extraAttribute = $validation;
                     }
 
-                    $functionMessage = null;
+                    $validationMessage = null;
 
-                    if (!empty($messages) && key_exists($input, $messages)) {
+                    if (!empty($messages)) {
 
-                        $inputMessages = $messages[$input];
+                        if (key_exists($attribute, $messages)) {
+                            $inputMessages = $messages[$attribute];
 
-                        foreach ($inputMessages as $inputMessage => $message) {
+                            foreach ($inputMessages as $inputMessage => $message) {
+                                if ($inputMessage == (is_string($newValidation) ? $newValidation : $validationName)) {
+                                    $validationMessage = self::filterMessage($attributeName, $message, $attributeValue, $extraAttribute);
+                                }
+                            }
+                        }
 
-                            if ($inputMessage == (is_string($newFunctionName) ? $newFunctionName : $functionName)) {
+                        $keys               = array_keys($messages);
+                        $genericValidations = array_values(array_filter($keys, function ($key) {
+                            return strstr($key, "*.");
+                        }));
 
-                                $message         = str_replace(":attr", $inputAttribute ?? $input, $message);
-                                $message         = !is_object($inputValue) ? str_replace(":value", $inputValue, $message) : $message;
-                                $functionMessage = $message;
+                        foreach ($genericValidations as $genericValidation) {
+                            $separatedGenericValidation = explode(".", $genericValidation);
+                            $genericValidationName      = end($separatedGenericValidation);
 
+                            if ($genericValidationName == $validationName) {
+                                $validationMessage = self::filterMessage($attributeName, $messages[$genericValidation], $attributeValue, $extraAttribute);
+                                $validationName    = $genericValidationName;
                             }
                         }
                     }
 
                     self::$messageNickName = $nickName;
-                    self::{$functionName}($input, $functionMessage, $inputValue, $extraParam, $target);
-
+                    self::{$validationName}($attributeName, $validationMessage, $attributeValue, $extraAttribute, $target);
                 }
             }
         }
@@ -124,23 +124,21 @@ final class Validator
     /**
      * Saves a new message for validation
      *
-     * @param string $input The input name
-     * @param string $messageName The name for the validation message
+     * @param string $attribute The attribute name
      * @param string $message The message for the input
      *
      * @return void
      */
-    protected static function setMessage(string $input, string $messageName, string $message): void
+    protected static function setMessage(string $attribute, string $message): void
     {
-        $input       = trim($input);
-        $messageName = trim($messageName);
+        $attribute = trim($attribute);
 
         if ($nickName = self::$messageNickName) {
-            self::$messages[trim($nickName)][$input][$messageName] = $message;
+            self::$messages[trim($nickName)][$attribute] = $message;
             return;
         }
 
-        self::$messages[$input][$messageName] = $message;
+        self::$messages[$attribute] = $message;
     }
 
     /**
@@ -155,6 +153,31 @@ final class Validator
         }
 
         return null;
+    }
+
+    /**
+     * Filter messages and substuition of paramaters
+     *
+     * @param string $attribute
+     * @param string $message
+     * @param mixed $attributeValue
+     * @param mixed $extraAttribute
+     * @return string
+     */
+    protected static function filterMessage(string $attribute, string $message, $attributeValue, $extraAttribute = null): string
+    {
+        $message = str_replace(":attr", $attribute, $message);
+
+        if (!is_object($attributeValue)) {
+            $message = str_replace(":value", $attributeValue, $message);
+        }
+
+        if (!empty($extraAttribute) && !is_object($extraAttribute)) {
+            $message = str_replace(":min", $extraAttribute, $message);
+            $message = str_replace(":max", $extraAttribute, $message);
+        }
+
+        return $message;
     }
 
     /**

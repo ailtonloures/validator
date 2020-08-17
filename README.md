@@ -59,7 +59,7 @@ if (!$validator->valid()) {
 ### Personalizando as mensagens de erro:
 
 Como terceiro parâmetro, o método **make** recebe as mensagems personalizadas. Para fazer-las, apenas crie um array passando pelo parâmetro em que a **chave** 
-do array seja sempre o nome do input que está validando e abra um novo array pra esse input e agora as **chaves** serão o nome das validações que está fazendo. 
+do array seja sempre o nome do atributo que está validando e abra um novo array pra esse atributo e agora as **chaves** serão o nome das validações que está fazendo. 
 Como no exemplo, é o **required**.
 
 ```php
@@ -95,9 +95,7 @@ Retorno, caso não seja válido
 ```json
 "validation": 
     {
-        "name": {
-            "required" : "Campo obrigatório"
-        },
+        "name": "Campo obrigatório"
     }
 ```
 
@@ -148,22 +146,18 @@ Retorno, caso não seja válido.
     {
         "first-target": 
         {
-            "name": {
-                "required" : "Campo obrigatório",
-            }
+            "name": "Campo obrigatório",
         },
         "second-target": 
         {
-            "email": {
-                "email" : "Invalid e-mail."
-            }
+            "email": "Invalid e-mail."
         }
     }
 ```
 
 ### Personalizando validação:
 
-Agora é possível criar a sua validação personalizada, através de uma função anônima onde a mesma é uma **callback** e recebe três parâmetros, o primeiro é **valor do input**, o segundo é o **nome do input** e o terceiro é todo o conteúdo do alvo válidado que por exemplo pode ser o corpo de uma requisição. O retorno dessa função **deverá ser sempre TRUE** caso não seja, ele dispara como não válido e ai você tem a resposta da sua validação. E obrigatóriamente você deverá personalizar uma mensagem para essa validação, em **$messages** ao ínves de passar o nome da validação, você pode chamar a palavra reservada **callback_function** e criar sua mensagem.
+Agora é possível criar a sua validação personalizada, através de uma função anônima onde a mesma é uma **callback** e recebe três parâmetros, o primeiro é **valor do atributo**, o segundo é o **nome do atributo** e o terceiro é todo o conteúdo do alvo válidado que por exemplo pode ser o corpo de uma requisição. O retorno dessa função **deverá ser sempre TRUE** caso não seja, ele dispara como não válido e ai você tem a resposta da sua validação. E obrigatóriamente você deverá personalizar uma mensagem para essa validação, em **$messages** ao ínves de passar o nome da validação, você pode chamar a palavra reservada **callback_function** e criar sua mensagem.
 
 ```php
 <?php
@@ -175,7 +169,7 @@ require './vendor/autoload.php';
 $target = $_POST;
 
 $rules  = [
-    "age" => function($value, $input, $post) {
+    "age" => function($value, $attribute, $post) {
         return $value >= 18;
     },
 ];
@@ -200,13 +194,11 @@ Retorno, caso não seja válido.
 ```json
 "validation": 
     {
-        "age" : {
-            "callback" : "Não é maior de 18 anos"
-        }
+        "age" : "Não é maior de 18 anos"
     }
 ```
 
-Pode também dar um nome para essa função anônima caso queira fazer mais de uma validação personalizada para um input ou outra já existente e obrigatóriamente para receber a mensagem dessa função nomeada, você deve passar o nome da função também em **$messages**.
+Pode também dar um nome para essa função anônima caso queira fazer mais de uma validação personalizada para um atributo ou outra já existente e obrigatóriamente para receber a mensagem dessa função nomeada, você deve passar o nome da função também em **$messages**.
 
 ```php
 <?php
@@ -220,7 +212,7 @@ $target = $_POST;
 $rules  = [
     "age" => [
         'required',
-        'not_adult' => function($value, $input, $post) {
+        'not_adult' => function($value, $attribute, $post) {
             return $value >= 18;
         }
     ],
@@ -247,15 +239,13 @@ Retorno, caso não seja válido continuará sendo...
 ```json
 "validation": 
     {
-        "age" : {
-            "callback" : "Não é maior de 18 anos"
-        }
+        "age" : "Não é maior de 18 anos"
     }
 ```
 
 ### Novo nome para o atributo:
 
-É possível também renomear os atributos passando no quarto parâmetro um array onde a chave é o **nome do input** e o valor é o novo nome que deseja dar. E para receber esse valor, você pode usar a palavra reservada **:attr**.
+É possível também renomear os atributos passando no quarto parâmetro um array onde a chave é o **nome do atributo** e o valor é o novo nome que deseja dar. E para receber esse valor, você pode usar a palavra reservada **:attr**.
 
 ```php
 <?php
@@ -267,7 +257,7 @@ require './vendor/autoload.php';
 $target = $_POST;
 
 $rules  = [
-    "age" => function($value, $input, $post) {
+    "age" => function($value, $attribute, $post) {
         return $value >= 18;
     },
 ];
@@ -296,9 +286,7 @@ Retorno, caso não seja válido.
 ```json
 "validation": 
     {
-        "age" : {
-            "callback" : "A idade dessa pessoa não é maior que 18 anos"
-        }
+        "idade" : "A idade dessa pessoa não é maior que 18 anos"
     }
 ```
 
@@ -307,15 +295,13 @@ Caso não deseje renomear, pode passar o :attr da mesma forma, mas ao invés dis
 ```json
 "validation": 
     {
-        "age" : { 
-            "callback" : "A age dessa pessoa não é maior que 18 anos"
-        }
+        "age" :  "A age dessa pessoa não é maior que 18 anos"
     }
 ```
 
-### Recebendo valor do input:
+### Recebendo valor do atributo:
 
-Você também pode receber o **valor** do input que está sendo validado e passar na mensagem usando a palavra reservada **:value**. 
+Você também pode receber o **valor** do atributo que está sendo validado e passar na mensagem usando a palavra reservada **:value**. 
 
 ```php
 <?php
@@ -327,7 +313,7 @@ require './vendor/autoload.php';
 $target = $_POST;
 
 $rules  = [
-    "age" => function($value, $input, $post) {
+    "age" => function($value, $attribute, $post) {
         return $value >= 18;
     },
 ];
@@ -351,8 +337,90 @@ Retorno, caso não seja válido.
 ```json
 "validation": 
     {
-        "age" : {
-            "callback" : "17 não é maior que 18"
-        }
+        "age" :  "17 não é maior que 18"
     }
+```
+
+### Validação genérica:
+
+Simplificando a validação de vários atributos com a mesma regra.
+
+```php
+<?php
+
+use Validator\Validator;
+
+require './vendor/autoload.php';
+
+$validator = Validator::make(
+    $_GET,
+    [
+        'name' => 'required|min:4',
+        'age' => [
+            'required',
+            'not_adult' => function(int $value) {
+                return $value >= 18;
+            },
+        ],
+    ],
+    [
+        'age' => [
+            'not_adult' => 'Deve ter mais do que 18 anos'
+        ],
+        '*.required' => "Campo :attr é obrigatório",
+    ],
+    [
+        'name' => 'nome',
+        'age' => 'idade'
+    ]
+);
+
+if (!$validator->valid())
+    echo json_encode($validator->fails());
+```
+
+Retorno, caso não seja válido.
+
+```json
+"validation": {
+    "nome": "Campo nome é obrigatório",
+    "idade": "Campo idade é obrigatório"
+  }
+```
+
+Outro exemplo.
+
+```php
+<?php
+
+use Validator\Validator;
+
+require './vendor/autoload.php';
+
+$validator = Validator::make(
+    $_GET,
+    [
+        'name' => 'required|min:2',
+        'second_name' => 'min:4',
+    ],
+    [
+        '*.min' => "Este campo deve ter no mínimo :min caracteres",
+    ],
+    [
+        'name' => 'nome',
+        'second_name' => 'sobrenome'
+    ]
+);
+
+if (!$validator->valid())
+    echo json_encode($validator->fails());
+```
+
+Retorno, caso não seja válido.
+
+```json
+"validation": {
+    "nome": "Este campo deve ter no mínimo 2 caracteres",
+    "sobrenome": "Este campo deve ter no mínimo 4 caracteres"
+  }
 ```
