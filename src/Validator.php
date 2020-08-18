@@ -113,7 +113,7 @@ final class Validator
                     }
 
                     self::$messageNickName = $nickName;
-                    self::{$validationName}($attributeName, $validationMessage, $attributeValue, $extraAttribute, $target);
+                    self::{$validationName}($attribute, $validationMessage, $attributeValue, $extraAttribute, $target);
                 }
             }
         }

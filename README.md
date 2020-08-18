@@ -286,7 +286,7 @@ Retorno, caso não seja válido.
 ```json
 "validation": 
     {
-        "idade" : "A idade dessa pessoa não é maior que 18 anos"
+        "age" : "A idade dessa pessoa não é maior que 18 anos"
     }
 ```
 
@@ -383,8 +383,8 @@ Retorno, caso não seja válido.
 
 ```json
 "validation": {
-    "nome": "Campo nome é obrigatório",
-    "idade": "Campo idade é obrigatório"
+    "name": "Campo nome é obrigatório",
+    "age": "Campo idade é obrigatório"
   }
 ```
 
@@ -400,16 +400,12 @@ require './vendor/autoload.php';
 $validator = Validator::make(
     $_GET,
     [
-        'name' => 'required|min:2',
-        'second_name' => 'min:4',
+        'nome' => 'required|min:2',
+        'sobrenome' => 'min:4',
     ],
     [
         '*.min' => "Este campo deve ter no mínimo :min caracteres",
     ],
-    [
-        'name' => 'nome',
-        'second_name' => 'sobrenome'
-    ]
 );
 
 if (!$validator->valid())
