@@ -2,7 +2,7 @@
 
 use Validator\Validator;
 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 $validator = Validator::make(
     $_GET,
