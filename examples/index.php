@@ -5,24 +5,39 @@ use Validator\Validator;
 require __DIR__ . '/../vendor/autoload.php';
 
 $validator = Validator::make(
-    $_GET,
     [
-        'name' => 'required|min:4',
-        'age' => function(int $value) {
-                return $value >= 18;
-        },
+        'email' => 'jonhdoe@gmail.com',
+        'name'  => 'Jonh Doe',
+        'site'  => 'myportfolio.com',
+        'age'   => '17',
+        'birth' => '2003-01-01',
     ],
     [
-        'age' => [
-            'callback_function' => 'Deve ter mais do que 18 anos'
+        'email' => 'email',
+        'name'  => 'required',
+        'site'  => 'url',
+        'age'   => ['required', 'numeric:gte=18', 'max_number:100'],
+        'birth' => 'date:lte=2002-12-31',
+    ],
+    [
+        'required.*' => 'Campo obrigatório',
+        'age'        => [
+            'numeric'    => [
+                'default' => 'A :attr está com um valor inválido',
+                'gte'     => 'A :attr deve ser maior que :gte.',
+            ],
+            'max_number' => 'A :attr máxima permitida é de :max_number anos',
         ],
-        '*.required' => "Campo :attr é obrigatório",
+        'url.*'      => 'URL inválida',
+        'email.*'    => 'E-mail inválido',
+        'date.lte'   => 'A :attr deve ser menor que :date|format:d/m/Y.',
     ],
     [
-        'name' => 'nome',
-        'age' => 'idade'
+        'birth' => 'data de nascimento',
+        'age'   => 'idade',
     ]
 );
 
-if (!$validator->valid())
-    echo json_encode($validator->fails());
+if ($validator->invalid()) {
+    echo $validator->fails(true);
+}
